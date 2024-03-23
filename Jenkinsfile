@@ -1,5 +1,5 @@
 pipeline {
-    agent { docker { image 'php:8.3.4-alpine3.19' } }
+    agent { docker { image 'php:8.3.4-alpine3.19' }, label '!windows' }
     environment {
         SONARQUBE_PROJECT_KEY = 'OWS-Hive-game'
     }
@@ -9,14 +9,13 @@ pipeline {
                 sh 'php --version'
             }
         }
-    }
-    agent { label '!windows' }
-    stage('SonarQube') {
-      steps {
-        script { scannerHome = tool 'SonarQube Scanner' }
-        withSonarQubeEnv('SonarQube') {
-          sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${SONARQUBE_PROJECT_KEY}"
+        stage('SonarQube') {
+            steps {
+                script { scannerHome = tool 'SonarQube Scanner' }
+                withSonarQubeEnv('SonarQube') {
+                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${SONARQUBE_PROJECT_KEY}"
+                }
+            }
         }
-      }
     }
 }
