@@ -1,0 +1,89 @@
+version: '3'
+
+services:
+  jenkins-blueocean:
+    build:
+      context: .
+      dockerfile: jenkins.Dockerfile
+    container_name: jenkins-blueocean
+    restart: on-failure
+    environment:
+      DOCKER_HOST: tcp://docker:2376
+      DOCKER_CERT_PATH: /certs/client
+      DOCKER_TLS_VERIFY: '1'
+    volumes:
+      - jenkins-data:/var/jenkins_home
+      - jenkins-docker-certs:/certs/client:ro
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    networks:
+      - jenkins
+
+  docker:
+    image: docker:dind
+    container_name: docker
+    restart: 'no'
+    privileged: true
+    environment:
+      DOCKER_TLS_CERTDIR: /certs
+    volumes:
+      - jenkins-docker-certs:/certs/client
+      - jenkins-data:/var/jenkins_home
+    ports:
+      - "2376:2376"
+    networks:
+      - jenkins
+
+  sonarqube:
+    image: sonarqube:latest
+    container_name: sonarqube
+    restart: always
+    ports:
+      - "9000:9000"
+    networks:
+      - jenkins
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DB_NAME}
+    volumes:
+      - ./hive.sql:/docker-entrypoint-initdb.d/hive.sql
+    ports:
+      - "3306:3306"
+    networks:
+      - website
+
+  php:
+    build:
+      context: .
+      dockerfile: php.Dockerfile
+    container_name: php
+    restart: always
+    environment:
+      - MYSQL_HOST= tcp://mysql:3306
+      - MYSQL_DB_NAME=${MYSQL_DB_NAME}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      - ./website:/var/www/html
+    ports:
+      - "8000:8000"
+    command: php -S 0.0.0.0:8000 -t /var/www/html
+    networks:
+      - website
+
+
+volumes:
+  jenkins-data:
+  jenkins-docker-certs:
+
+networks:
+  jenkins:
+    external: true
+  website:
