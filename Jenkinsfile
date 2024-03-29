@@ -6,12 +6,6 @@ pipeline {
         SONARQUBE_PROJECT_KEY = 'OWS-Hive-game'
     }
     stages {
-        stage('Install Dependencies') {
-            steps {
-                sh 'composer install --prefer-dist'
-            }
-        }
-
         stage('SonarQube') {
             steps {
                 script { scannerHome = tool 'SonarQube Scanner' }
@@ -23,7 +17,7 @@ pipeline {
 
         stage('Unit Tests') {
             steps {
-                sh 'vendor/bin/phpunit'
+                sh '$PATH:vendor/bin/phpunit'
                 xunit([
                     thresholds: [
                         failed ( failureThreshold: "0" ),
