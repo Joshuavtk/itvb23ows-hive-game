@@ -8,10 +8,17 @@ class Database extends PDO
 {
     public function __construct()
     {
-        $host = $_ENV['MYSQL_HOST'];
-        $database = $_ENV['MYSQL_DB_NAME'];
-        $user = $_ENV['MYSQL_USER'];
-        $password = $_ENV['MYSQL_PASSWORD'];
+        $host = '';
+        $database = '';
+        $user = '';
+        $password = '';
+
+        if (isset($_ENV['MYSQL_HOST'])) {
+            $host = $_ENV['MYSQL_HOST'];
+            $database = $_ENV['MYSQL_DB_NAME'];
+            $user = $_ENV['MYSQL_USER'];
+            $password = $_ENV['MYSQL_PASSWORD'];
+        }
 
         $dsn = "mysql:host=$host;dbname=$database;charset=UTF8";
 
