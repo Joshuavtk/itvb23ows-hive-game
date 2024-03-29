@@ -2,29 +2,25 @@
 
 require_once '../vendor/autoload.php';
 
-session_start();
-
 use App\Controller\HiveController;
+use App\Controller\WebController;
+use App\Model\Board;
 use App\Model\Database;
 
+$webController = new WebController();
 $database = new Database();
 $hiveController = new HiveController($database);
+
+if (!isset($_SESSION['board'])) {
+    $webController->resetBoardState();
+}
 
 $board = $_SESSION['board'];
 $player = $_SESSION['player'];
 $hand = $_SESSION['hand'];
 
-$to = [];
-foreach ($hiveController::OFFSETS as $pq) {
-    foreach (array_keys($board) as $pos) {
-        $pq2 = explode(',', $pos);
-        $to[] = ($pq[0] + $pq2[0]) . ',' . ($pq[1] + $pq2[1]);
-    }
-}
-$to = array_unique($to);
-if (!count($to)) {
-    $to[] = '0,0';
-}
+$boardModel = new Board($board, $hand, $player);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -138,14 +134,14 @@ if (!count($to)) {
 <form method="post" action="play.php">
     <select name="piece">
         <?php
-        foreach ($hand[$player] as $tile => $ct) {
+        foreach ($boardModel->getPlaceablePieces() as $tile) {
             echo "<option value=\"$tile\">$tile</option>";
         }
         ?>
     </select>
     <select name="to">
         <?php
-        foreach ($to as $pos) {
+        foreach ($boardModel->getValidPlacements() as $pos) {
             echo "<option value=\"$pos\">$pos</option>";
         }
         ?>
@@ -162,7 +158,7 @@ if (!count($to)) {
     </select>
     <select name="to">
         <?php
-        foreach ($to as $pos) {
+        foreach ($boardModel->to as $pos) {
             echo "<option value=\"$pos\">$pos</option>";
         }
         ?>

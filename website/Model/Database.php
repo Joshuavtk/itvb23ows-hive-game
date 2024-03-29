@@ -8,7 +8,7 @@ class Database extends PDO
 {
     public function __construct()
     {
-        $host = 'mysql';
+        $host = '127.0.0.1:3306';
         $database = 'hive_db';
         $user = 'root';
         $password = 'password';
