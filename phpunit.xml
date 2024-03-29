@@ -5,15 +5,6 @@
             <directory suffix=".php">tests</directory>
         </testsuite>
     </testsuites>
-    <coverage>
-        <include>
-            <directory suffix=".php">website</directory>
-        </include>
-        <report>
-            <html outputDirectory="build/coverage" />
-            <cobertura outputFile="build/logs/cobertura.xml"/>
-        </report>
-    </coverage>
     <logging>
         <junit outputFile="build/logs/junit.xml" />
     </logging>
