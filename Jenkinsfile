@@ -6,6 +6,12 @@ pipeline {
         SONARQUBE_PROJECT_KEY = 'OWS-Hive-game'
     }
     stages {
+        stage('Install Dependencies') {
+            steps {
+                sh 'composer install --prefer-dist'
+            }
+        }
+
         stage('SonarQube') {
             steps {
                 script { scannerHome = tool 'SonarQube Scanner' }
