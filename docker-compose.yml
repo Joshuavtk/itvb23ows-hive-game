@@ -38,7 +38,7 @@ services:
   sonarqube:
     image: sonarqube:latest
     container_name: sonarqube
-    restart: always
+    restart: on-failure
     ports:
       - "9000:9000"
     networks:
@@ -66,15 +66,30 @@ services:
     container_name: php
     restart: always
     environment:
-      - MYSQL_HOST= tcp://mysql:3306
-      - MYSQL_DB_NAME=${MYSQL_DB_NAME}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      MYSQL_HOST: mysql
+      MYSQL_DB_NAME: ${MYSQL_DB_NAME}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
-      - ./website:/var/www/html
+      - ./website:/var/www/html/website
+      - ./vendor:/var/www/html/vendor
     ports:
-      - "8000:8000"
-    command: php -S 0.0.0.0:8000 -t /var/www/html
+      - "8000:80"
+    networks:
+      - website
+
+  phpunit:
+    image: php:8.3.4
+    container_name: phpunit
+    command: ["php", "./vendor/bin/phpunit"]
+    restart: 'no'
+    volumes:
+      - ./vendor:/vendor
+      - ./website:/website
+      - ./phpunit.xml:/phpunit.xml
+      - ./tests:/tests
+    depends_on:
+      - php
     networks:
       - website
 
