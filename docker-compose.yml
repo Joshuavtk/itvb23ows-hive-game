@@ -59,6 +59,7 @@ services:
       - "3306:3306"
     networks:
       - website
+      - jenkins
 
   php:
     build:

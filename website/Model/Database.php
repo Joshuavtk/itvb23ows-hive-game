@@ -8,10 +8,10 @@ class Database extends PDO
 {
     public function __construct()
     {
-        $host = '';
-        $database = '';
-        $user = '';
-        $password = '';
+        $host = 'mysql';
+        $database = 'hive_db';
+        $user = 'root';
+        $password = 'password';
 
         if (isset($_ENV['MYSQL_HOST'])) {
             $host = $_ENV['MYSQL_HOST'];
