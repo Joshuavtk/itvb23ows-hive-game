@@ -17,7 +17,7 @@ pipeline {
 
         stage('Unit Tests') {
             steps {
-                sh '$PATH:vendor/bin/phpunit'
+                sh '/vendor/bin/phpunit'
                 xunit([
                     thresholds: [
                         failed ( failureThreshold: "0" ),
