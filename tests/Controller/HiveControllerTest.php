@@ -34,20 +34,4 @@ class HiveControllerTest extends TestCase
         $this->assertFalse($this->hiveController->isNeighbour('0,0', '2,-2'));
         $this->assertFalse($this->hiveController->isNeighbour('0,0', '-2,2'));
     }
-
-    public function testNeighboursAreSameColor()
-    {
-    }
-
-    public function testSlide()
-    {
-    }
-
-    public function testHasNeighbour()
-    {
-    }
-
-    public function testLen()
-    {
-    }
 }
