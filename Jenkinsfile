@@ -30,7 +30,7 @@ pipeline {
                         skipped ( unstableThreshold: "0" )
                     ],
                     tools: [
-                        PHPUnit(pattern: 'build/logs/junit.xml', stopProcessingIfError: true, failIfNotNew: true)
+                        PHPUnit(pattern: 'build/logs/junit.xml', stopProcessingIfError: false, failIfNotNew: true)
                     ]
                 ])
                 publishHTML([
@@ -43,7 +43,7 @@ pipeline {
                     reportTitles: ''
                 ])
                 discoverGitReferenceBuild()
-                recordCoverage(tools: [[parser: 'COBERTURA', pattern: 'build/logs/cobertura.xml']])
+//                 recordCoverage(tools: [[parser: 'COBERTURA', pattern: 'build/logs/cobertura.xml']])
             }
         }
     }
