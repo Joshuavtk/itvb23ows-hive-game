@@ -14,7 +14,7 @@ services:
     volumes:
       - jenkins-data:/var/jenkins_home
       - jenkins-docker-certs:/certs/client:ro
-      - ./vendor:/vendor
+      - ./vendor:/var/jenkins_home/workspace/OWS_pipeline_1_main/vendor
     ports:
       - "8080:8080"
       - "50000:50000"
