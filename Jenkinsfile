@@ -33,17 +33,6 @@ pipeline {
                         PHPUnit(pattern: 'build/logs/junit.xml', stopProcessingIfError: false, failIfNotNew: true)
                     ]
                 ])
-//                 publishHTML([
-//                     allowMissing: false,
-//                     alwaysLinkToLastBuild: false,
-//                     keepAll: false,
-//                     reportDir: 'build/coverage',
-//                     reportFiles: 'index.html',
-//                     reportName: 'Coverage Report (HTML)',
-//                     reportTitles: ''
-//                 ])
-                discoverGitReferenceBuild()
-//                 recordCoverage(tools: [[parser: 'COBERTURA', pattern: 'build/logs/cobertura.xml']])
             }
         }
     }
